@@ -1,14 +1,13 @@
 {
-  "name": "guard",
+  "name": "safe-guard",
   "version": "0.1.0",
   "private": true,
   "license": "MIT",
   "dependencies": {
-    "@safe-global/safe-core-sdk": "3.3.5",
-    "@safe-global/safe-ethers-lib": "1.9.4",
     "@sovryn/ethers-provider": "1.0.2",
     "@sovryn/onboard-common": "1.0.0",
     "@sovryn/onboard-core": "1.0.6",
+    "@sovryn/onboard-hw-common": "^1.0.7",
     "@sovryn/onboard-injected": "1.0.3",
     "@sovryn/onboard-ledger": "1.0.7",
     "@sovryn/onboard-react": "1.0.12",

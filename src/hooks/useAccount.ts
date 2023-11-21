@@ -1,11 +1,11 @@
 import { useCallback, useEffect, useState } from "react";
 import { startWith } from "rxjs";
-import { onboard } from "../config/network";
 import { ethers } from "ethers";
+import { onboard } from "../config/network";
 import { state } from "../state/shared";
 
 export const useAccount = () => {
-  const [value, setValue] = useState(state.get().wallet);
+  const [value, setValue] = useState(state.get());
 
   const connect = useCallback(() => onboard.connectWallet(), []);
   
@@ -22,7 +22,7 @@ export const useAccount = () => {
   }, []);
 
   useEffect(() => {
-    const sub = state.select('wallet').subscribe(setValue);
+    const sub = state.select().subscribe(setValue);
     return () => sub.unsubscribe();
   }, []);
 

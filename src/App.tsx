@@ -1,16 +1,10 @@
-import { FC, PropsWithChildren, useEffect } from 'react';
+import { FC, PropsWithChildren } from 'react';
 import { Button } from '@sovryn/ui';
-import { useAccount } from './hooks/useAccount';
-import { useSafe } from './hooks/useSafe';
 import { OnboardProvider } from '@sovryn/onboard-react';
+import { useAccount } from './hooks/useAccount';
 
 export const App: FC<PropsWithChildren> = ({ children }) => {
-  const { init } = useSafe();
   const { address, connect } = useAccount();
-
-  useEffect(() => {
-    init();
-  }, [init]);
   
   return (
     <>

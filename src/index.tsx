@@ -5,8 +5,6 @@ import reportWebVitals from './reportWebVitals';
 import './styles/tailwindcss/index.css';
 import { Root } from './routes/Root';
 import { App } from './App';
-import { Proposal } from './routes/Proposal';
-import { Sign } from './routes/Sign';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -19,11 +17,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
-        element: <Proposal />
-      },
-      {
-        path: "/sign",
-        element: <Sign />,
+        element: <p>homepage</p>
       },
     ],
   },
