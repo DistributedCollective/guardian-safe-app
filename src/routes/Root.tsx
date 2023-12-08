@@ -12,7 +12,10 @@ export const Root = () => {
       <Header menuItems={
         <ol>
           <li>
-            <Link to="/">Home</Link>
+            <Link to="/">Review</Link>
+          </li>
+          <li>
+            <Link to="/vetoed">Vetoed</Link>
           </li>
         </ol>
       } secondaryContent={
