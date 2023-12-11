@@ -1,5 +1,6 @@
 import { gql, useLazyQuery, useQuery } from "@apollo/client";
 import { useEffect, useMemo } from "react";
+import { BITOCRACY_CANCEL_SIGNATURE } from "../config/constants";
 
 const QUERY_PROPOSALS = gql`
   query getProposals ($timestamp: Int!) {
@@ -25,7 +26,7 @@ const QUERY_PROPOSALS = gql`
 
 const QUERY_VETOES = gql`
   query getVetoes ($destinations: [Bytes]!) {
-    multisigTransactions (where: { destination_in: $destinations }) {
+    multisigTransactions (where: { destination_in: $destinations, data_contains: "${BITOCRACY_CANCEL_SIGNATURE}" }) {
       id
       destination
       data

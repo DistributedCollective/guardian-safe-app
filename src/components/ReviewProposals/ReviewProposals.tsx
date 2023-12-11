@@ -10,6 +10,7 @@ type RowType = {
   signatures: string;
   deadline: string;
   proposalId: string;
+  item: ProposalType;
 };
 
 const COLUMNS: ColumnOptions<RowType>[] = [{
@@ -29,7 +30,7 @@ const COLUMNS: ColumnOptions<RowType>[] = [{
 }, {
   id: 'actions',
   title: <></>,
-  cellRenderer: row => <VetoAction proposal={row} />
+  cellRenderer: row => <VetoAction proposal={row.item} />
 }];
 
 export const ReviewProposals = () => {
@@ -41,7 +42,8 @@ export const ReviewProposals = () => {
       title: item.description,
       deadline: new Date(item.eta * 1000).toISOString(),
       proposalId: item.id,
-      signatures: `${item.confirmations.length}/${item.required}`
+      signatures: `${item.confirmations.length}/${item.required}`,
+      item,
     };
   }), [data]);
 
