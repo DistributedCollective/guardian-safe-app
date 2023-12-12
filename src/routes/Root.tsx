@@ -1,11 +1,13 @@
-import { Header } from "@sovryn/ui";
+import { AddressBadge, Header } from "@sovryn/ui";
 import { Link, Outlet } from "react-router-dom";
 import { LinkAccountToExplorer } from "../components/LinkToExplorer/LinkToExplorer";
 import { useAccount } from "../hooks/useAccount";
+import { useMultisigData } from "../hooks/useMultisigData";
 
 export const Root = () => {
 
-  const { address } = useAccount(); 
+  const { address } = useAccount();
+  const { data, loading } = useMultisigData();
 
   return (
     <>
@@ -19,13 +21,14 @@ export const Root = () => {
           </li>
         </ol>
       } secondaryContent={
-        <ol>
+        <ol className="flex flex-row justify-between gap-3">
           <li>
-            <LinkAccountToExplorer value={address ?? '0x0'} />
+            <LinkAccountToExplorer value={address ?? '0x0'} label={<AddressBadge address={address!} />} />
           </li>
+          {!loading && <li>{data.owners.some(item => item.id.toLowerCase() === address?.toLowerCase()) ? 'Owner' : 'Not Owner'}</li>}
         </ol>
       } />
-      <div className="container my-8">
+      <div className="container my-12 max-w-2xl bg-gray-90 py-4 rounded">
         <Outlet />
       </div>
     </>

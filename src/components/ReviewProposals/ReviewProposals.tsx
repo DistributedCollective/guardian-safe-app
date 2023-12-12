@@ -3,6 +3,10 @@ import { ProposalType, useActiveBitocracyProposals } from "../../hooks/useActive
 import { useMemo } from "react";
 import { truncate } from "../../lib/helpers";
 import { VetoAction } from "../VetoAction/VetoAction";
+import dayjs from "dayjs";
+import relativeTime from 'dayjs/plugin/relativeTime';
+
+dayjs.extend(relativeTime);
 
 type RowType = {
   id: string;
@@ -27,6 +31,7 @@ const COLUMNS: ColumnOptions<RowType>[] = [{
   }, {
   id: 'deadline',
   title: 'Time to veto',
+  cellRenderer: row => <>{dayjs(row.deadline).fromNow(true)}</>,
 }, {
   id: 'actions',
   title: <></>,
@@ -40,7 +45,7 @@ export const ReviewProposals = () => {
     return {
       id: `${item.emittedBy.type}-${item.proposalId}`,
       title: item.description,
-      deadline: new Date(item.eta * 1000).toISOString(),
+      deadline: new Date(item.eta * 1000),
       proposalId: item.id,
       signatures: `${item.confirmations.length}/${item.required}`,
       item,
