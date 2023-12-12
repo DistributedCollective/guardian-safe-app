@@ -1,4 +1,4 @@
-import { ColumnOptions, Link, Table } from "@sovryn/ui";
+import { AddressBadge, ColumnOptions, Link, Table, Tooltip } from "@sovryn/ui";
 import { ProposalType, useActiveBitocracyProposals } from "../../hooks/useActiveProposals";
 import { useMemo } from "react";
 import { truncate } from "../../lib/helpers";
@@ -23,7 +23,7 @@ const COLUMNS: ColumnOptions<RowType>[] = [{
   }, {
   id: 'signatures',
   title: 'Signatures',
-  cellRenderer: row => <>{row.signatures}</>,
+  cellRenderer: row => <Tooltip content={<div>{row.item.confirmations.length > 0 ? row.item.confirmations.map(item => <AddressBadge key={item.signer.id} address={item.signer.id} />) : <span>Not vetoing.</span>}</div>}><span>{row.signatures}</span></Tooltip>,
   }, {
   id: 'deadline',
   title: 'Time to veto',

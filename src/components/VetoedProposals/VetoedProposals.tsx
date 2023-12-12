@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { Button, ButtonStyle, ColumnOptions, Link, Table } from "@sovryn/ui";
 import { ProposalType, useActiveBitocracyProposals } from "../../hooks/useActiveProposals";
 import { truncate } from "../../lib/helpers";
+import { useCanceledProposals } from "../../hooks/useCanceledProposals";
 
 type RowType = {
   id: string;
@@ -28,7 +29,7 @@ const COLUMNS: ColumnOptions<RowType>[] = [{
 }];
 
 export const VetoedProposals = () => {
-  const { loading, data } = useActiveBitocracyProposals();
+  const { loading, data } = useCanceledProposals();
 
   const items = useMemo(() => data.map((item: ProposalType) => {
     return {

@@ -13,7 +13,7 @@ const QUERY_PROPOSALS = gql`
         id
       }
     }
-    proposals (where: { eta_not: 0 eta_lt: $timestamp, executed: null, queued_not: null, canceled: null }) {
+    proposals (where: { canceled_not: null }) {
       id
       emittedBy {
         id
@@ -76,7 +76,7 @@ export type ProposalType = {
   required: number | null;
 };
 
-export const useActiveBitocracyProposals = () => {
+export const useCanceledProposals = () => {
   const proposals = useQuery(QUERY_PROPOSALS, { variables: { timestamp: Math.floor(Date.now() / 1000) }});
   const [getVetoes, vetoes] = useLazyQuery(QUERY_VETOES);
 

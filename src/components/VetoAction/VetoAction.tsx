@@ -1,4 +1,4 @@
-import { FC, useCallback } from "react";
+import { FC, useCallback, useMemo } from "react";
 import { Button } from "@sovryn/ui";
 import { ProposalType } from "../../hooks/useActiveProposals";
 import { useAccount } from "../../hooks/useAccount";
@@ -13,10 +13,16 @@ export const VetoAction: FC<VetoActionProps> = ({ proposal }) => {
   const loading = useTxStore(state => state.proposal !== null);
   const setProposal = useTxStore(state => state.setProposal);
 
-  const handleVetoButton = useCallback(() => setProposal(proposal.emittedBy.id, proposal.proposalId), [proposal.emittedBy.id, proposal.proposalId, setProposal]);
+  const handleVetoButton = useCallback(() => setProposal(proposal), [proposal, setProposal]);
 
-  if (proposal.status === null || !proposal.confirmations.find((item) => item.signer.toLowerCase() === address?.toLowerCase())) {
-    return <Button text="Veto" disabled={loading} onClick={handleVetoButton} />;
-  }
-  return null;
+  const disabled = useMemo(() => {
+    if (
+      !proposal.confirmations.some((item) => item.signer.id.toLowerCase() === address?.toLowerCase())
+    ) {
+      return false;
+    }
+    return loading;
+  }, [address, loading, proposal.confirmations]);
+
+  return <Button text="Veto" disabled={disabled} onClick={handleVetoButton} />;
 };
