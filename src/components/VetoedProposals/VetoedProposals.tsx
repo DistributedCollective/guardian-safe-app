@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import { Button, ButtonStyle, ColumnOptions, Link, Table } from "@sovryn/ui";
-import { ProposalType, useActiveBitocracyProposals } from "../../hooks/useActiveProposals";
+import { ProposalType } from "../../hooks/useActiveProposals";
 import { truncate } from "../../lib/helpers";
 import { useCanceledProposals } from "../../hooks/useCanceledProposals";
 
