@@ -1,10 +1,11 @@
-import { AddressBadge, ColumnOptions, Link, Table, Tooltip } from "@sovryn/ui";
+import { ColumnOptions, Link, Table } from "@sovryn/ui";
 import { ProposalType, useActiveBitocracyProposals } from "../../hooks/useActiveProposals";
 import { useMemo } from "react";
 import { truncate } from "../../lib/helpers";
 import { VetoAction } from "../VetoAction/VetoAction";
 import dayjs from "dayjs";
 import relativeTime from 'dayjs/plugin/relativeTime';
+import { ListOfSigners } from "../ListOfSigners/ListOfSigners";
 
 dayjs.extend(relativeTime);
 
@@ -27,7 +28,7 @@ const COLUMNS: ColumnOptions<RowType>[] = [{
   }, {
   id: 'signatures',
   title: 'Signatures',
-  cellRenderer: row => <Tooltip content={<div>{row.item.confirmations.length > 0 ? row.item.confirmations.map(item => <AddressBadge key={item.signer.id} address={item.signer.id} />) : <span>Not vetoing.</span>}</div>}><span>{row.signatures}</span></Tooltip>,
+  cellRenderer: row => <ListOfSigners row={row} />,
   }, {
   id: 'deadline',
   title: 'Time to veto',

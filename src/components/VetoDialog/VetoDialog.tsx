@@ -1,4 +1,4 @@
-import { Button, ButtonStyle, Dialog, DialogBody, DialogHeader } from "@sovryn/ui";
+import { AddressBadge, Button, ButtonStyle, Dialog, DialogBody, DialogHeader } from "@sovryn/ui";
 import { useRefetchTrigger, useTxStore } from "../../lib/tx-store";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { Contract, constants } from "ethers";
@@ -81,7 +81,7 @@ export const VetoDialog = () => {
             {txState === 'pending' && <p>Transaction pending.</p>}
             {txState === 'success' && <p>Transaction successfull.</p>}
             {txState === 'error' && <p>Transaction failed.</p>}
-            <div className="my-4"><LinkHashToExplorer value={txHash} /></div>
+            <div className="my-4"><LinkHashToExplorer value={txHash} label={<AddressBadge address={txHash} />} /></div>
             <Button style={ButtonStyle.secondary} text="Close Dialog" onClick={closeDialog} />
           </>
         )}

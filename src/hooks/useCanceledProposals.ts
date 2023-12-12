@@ -11,7 +11,7 @@ const QUERY_PROPOSALS = gql`
         id
       }
     }
-    proposals (where: { executed_not: null }) {
+    proposals (where: { canceled_not: null }) {
       id
       emittedBy {
         id

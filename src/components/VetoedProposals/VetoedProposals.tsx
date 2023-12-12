@@ -3,6 +3,7 @@ import { Button, ButtonStyle, ColumnOptions, Link, Table } from "@sovryn/ui";
 import { ProposalType } from "../../hooks/useActiveProposals";
 import { truncate } from "../../lib/helpers";
 import { useCanceledProposals } from "../../hooks/useCanceledProposals";
+import { ListOfSigners } from "../ListOfSigners/ListOfSigners";
 
 type RowType = {
   id: string;
@@ -21,7 +22,7 @@ const COLUMNS: ColumnOptions<RowType>[] = [{
   }, {
   id: 'signatures',
   title: 'Signatures',
-  cellRenderer: row => <>{row.signatures}</>,
+  cellRenderer: row => <ListOfSigners row={row} />,
   }, {
   id: 'actions',
   title: <></>,
@@ -36,7 +37,8 @@ export const VetoedProposals = () => {
       id: `${item.emittedBy.type}-${item.proposalId}`,
       title: item.description,
       proposalId: item.id,
-      signatures: `${item.confirmations.length}/${item.required}`
+      signatures: `${item.confirmations.length}/${item.required}`,
+      item,
     };
   }), [data]);
 
