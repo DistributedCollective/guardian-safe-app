@@ -1,8 +1,9 @@
 import { AddressBadge, Header } from "@sovryn/ui";
-import { Link, Outlet } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import { LinkAccountToExplorer } from "../components/LinkToExplorer/LinkToExplorer";
 import { useAccount } from "../hooks/useAccount";
 import { useMultisigData } from "../hooks/useMultisigData";
+import { NavItem } from "../components/NavItem/NavItem";
 
 export const Root = () => {
 
@@ -12,12 +13,12 @@ export const Root = () => {
   return (
     <>
       <Header menuItems={
-        <ol>
+        <ol className="flex flex-col gap-4 lg:flex-row w-full lg:w-auto">
           <li>
-            <Link to="/">Review</Link>
+            <NavItem to="/">Review</NavItem>
           </li>
           <li>
-            <Link to="/vetoed">Vetoed</Link>
+            <NavItem to="/vetoed">Vetoed</NavItem>
           </li>
         </ol>
       } secondaryContent={
