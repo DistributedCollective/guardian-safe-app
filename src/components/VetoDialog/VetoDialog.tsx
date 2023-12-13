@@ -36,7 +36,12 @@ export const VetoDialog = () => {
 
   const handleConfirm = useCallback(async () => {
     const c = msContract.current.connect(signer!);
-    return await c.confirmTransaction(selectedProposal!.proposalId);
+    return await c.confirmTransaction(selectedProposal!.transactionId, { gasLimit: 1_000_000 });
+  }, [selectedProposal, signer]);
+
+  const handleExecute = useCallback(async () => {
+    const c = msContract.current.connect(signer!);
+    return await c.executeTransaction(selectedProposal!.transactionId, { gasLimit: 1_000_000 });
   }, [selectedProposal, signer]);
 
   const handleVetoButton = useCallback(async () => {
@@ -49,6 +54,8 @@ export const VetoDialog = () => {
         tx = await handleSubmit();
       } else if (selectedProposal.status === 'SUBMITTED') {
         tx = await handleConfirm();
+      } else if (selectedProposal.status === 'FAILED') {
+        tx = await handleExecute();
       }
   
       setTxHash(tx.hash);
@@ -60,7 +67,7 @@ export const VetoDialog = () => {
       setTxState('error');
       console.error(e);
     }
-  }, [handleConfirm, handleSubmit, markCompleted, selectedProposal]);
+  }, [handleConfirm, handleExecute, handleSubmit, markCompleted, selectedProposal]);
 
   return <Dialog isOpen={selectedProposal !== null} onClose={closeDialog}>
     <DialogHeader title="Veto Proposal" />
