@@ -6,7 +6,7 @@ import trezorModule from '@sovryn/onboard-trezor';
 import walletConnectModule from '@sovryn/onboard-walletconnect';
 import setup, { Chain, ChainIds } from '@sovryn/ethers-provider';
 
-export const CHAIN_ID: string = '0x' + Number(parseInt(process.env.REACT_APP_CHAIN_ID || '30')).toString(16);
+export const CHAIN_ID = '0x' + Number(parseInt(process.env.REACT_APP_CHAIN_ID || '30')).toString(16) as ChainIds;
 
 export const IS_MAINNET = CHAIN_ID === ChainIds.RSK_MAINNET;
 

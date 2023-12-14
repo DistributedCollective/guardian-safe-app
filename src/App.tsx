@@ -4,6 +4,7 @@ import { OnboardProvider } from '@sovryn/onboard-react';
 import { ApolloProvider } from '@apollo/client';
 import { useAccount } from './hooks/useAccount';
 import { apollo } from './lib/apollo';
+import { VetoDialog } from './components/VetoDialog/VetoDialog';
 
 export const App: FC<PropsWithChildren> = ({ children }) => {
   const { address, connect } = useAccount();
@@ -12,6 +13,7 @@ export const App: FC<PropsWithChildren> = ({ children }) => {
     <ApolloProvider client={apollo}>
       {address ? (<>{children}</>) : (<div className='w-full h-screen flex justify-center items-center'><Button text="Connect Wallet" onClick={connect} /></div>)}
       <OnboardProvider />
+      <VetoDialog />
     </ApolloProvider>
   );
 }
