@@ -1,11 +1,11 @@
-import { ColumnOptions, Link, Table } from "@sovryn/ui";
+import { ColumnOptions, Table } from "@sovryn/ui";
 import { ProposalType, useActiveBitocracyProposals } from "../../hooks/useActiveProposals";
 import { useMemo } from "react";
-import { truncate } from "../../lib/helpers";
 import { VetoAction } from "../VetoAction/VetoAction";
 import dayjs from "dayjs";
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { ListOfSigners } from "../ListOfSigners/ListOfSigners";
+import { LinkToBitocracy } from "../LinkToBitocracy/LinkToExplorer";
 
 dayjs.extend(relativeTime);
 
@@ -24,7 +24,7 @@ const COLUMNS: ColumnOptions<RowType>[] = [{
   }, {
   id: 'title',
   title: 'Title',
-  cellRenderer: (row) => <Link href={`https://sovryn.app/bitocracy/${row.proposalId}`} text={truncate(row.title, 20)} openNewTab />,
+  cellRenderer: (row) => <LinkToBitocracy id={row.proposalId} title={row.title} />,
   }, {
   id: 'signatures',
   title: 'Signatures',

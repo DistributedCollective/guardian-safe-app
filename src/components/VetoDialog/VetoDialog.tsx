@@ -1,6 +1,6 @@
 import { AddressBadge, Button, ButtonStyle, Dialog, DialogBody, DialogHeader } from "@sovryn/ui";
 import { useRefetchTrigger, useTxStore } from "../../lib/tx-store";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Contract, constants } from "ethers";
 import { MULTISIG_CONTRACT_ADDRESS } from "../../config/constants";
 import { getProvider } from "@sovryn/ethers-provider";
@@ -10,37 +10,46 @@ import { useAccount } from "../../hooks/useAccount";
 import { generateCancelData } from "../../lib/helpers";
 import { LinkHashToExplorer } from "../LinkToExplorer/LinkToExplorer";
 
+const contract = new Contract(MULTISIG_CONTRACT_ADDRESS, abi, getProvider(CHAIN_ID));
+
+enum TxState {
+  user,
+  pending,
+  success,
+  error,
+}
+
 export const VetoDialog = () => {
-  const msContract = useRef(new Contract(MULTISIG_CONTRACT_ADDRESS, abi, getProvider(CHAIN_ID)));
+  
   const selectedProposal = useTxStore(state => state.proposal);
   const closeDialog = useTxStore(state => state.clearProposal);
   const markCompleted = useRefetchTrigger(state => state.trigger);
 
   const [txHash, setTxHash] = useState<string | null>(null);
-  const [txState, setTxState] = useState<'user' | 'pending' | 'success' | 'error' | null>(null);
+  const [txState, setTxState] = useState<TxState | null>(null);
 
   const { signer } = useAccount();
 
   useEffect(() => {
-    const unsub = useTxStore.subscribe(() => {
+    const unsubscribe = useTxStore.subscribe(() => {
       setTxHash(null);
       setTxState(null);
     });
-    return () => unsub();
+    return () => unsubscribe();
   }, []);
 
   const handleSubmit = useCallback(async () => {
-    const c = msContract.current.connect(signer!);
+    const c = contract.connect(signer!);
     return await c.submitTransaction(selectedProposal!.emittedBy.id, constants.Zero, generateCancelData(selectedProposal!.proposalId));
   }, [selectedProposal, signer]);
 
   const handleConfirm = useCallback(async () => {
-    const c = msContract.current.connect(signer!);
+    const c = contract.connect(signer!);
     return await c.confirmTransaction(selectedProposal!.transactionId, { gasLimit: 1_000_000 });
   }, [selectedProposal, signer]);
 
   const handleExecute = useCallback(async () => {
-    const c = msContract.current.connect(signer!);
+    const c = contract.connect(signer!);
     return await c.executeTransaction(selectedProposal!.transactionId, { gasLimit: 1_000_000 });
   }, [selectedProposal, signer]);
 
@@ -49,7 +58,7 @@ export const VetoDialog = () => {
     try {
       let tx;
       setTxHash(null);
-      setTxState('user');
+      setTxState(TxState.user);
       if (selectedProposal.status === null) {
         tx = await handleSubmit();
       } else if (selectedProposal.status === 'SUBMITTED') {
@@ -59,12 +68,12 @@ export const VetoDialog = () => {
       }
   
       setTxHash(tx.hash);
-      setTxState('pending');
+      setTxState(TxState.pending);
       await tx.wait();
-      setTxState('success');
+      setTxState(TxState.success);
       markCompleted();
     } catch (e) {
-      setTxState('error');
+      setTxState(TxState.error);
       console.error(e);
     }
   }, [handleConfirm, handleExecute, handleSubmit, markCompleted, selectedProposal]);
@@ -79,15 +88,15 @@ export const VetoDialog = () => {
             <p className="text-red-500">This action cannot be undone.</p>
             <div className="flex flex-row justify-end gap-4 mt-4">
               <Button style={ButtonStyle.secondary} text="Cancel" onClick={closeDialog} />
-              <Button text="Veto" onClick={handleVetoButton} loading={txState === 'user'} disabled={txState === 'user'} />
+              <Button text="Veto" onClick={handleVetoButton} loading={txState === TxState.user} disabled={txState === TxState.user} />
             </div>
           </>
         )}
         {txHash !== null && (
           <>
-            {txState === 'pending' && <p>Transaction pending.</p>}
-            {txState === 'success' && <p>Transaction successfull.</p>}
-            {txState === 'error' && <p>Transaction failed.</p>}
+            {txState === TxState.pending && <p>Transaction pending.</p>}
+            {txState === TxState.success && <p>Transaction successful.</p>}
+            {txState === TxState.error && <p>Transaction failed.</p>}
             <div className="my-4"><LinkHashToExplorer value={txHash} label={<AddressBadge address={txHash} />} /></div>
             <Button style={ButtonStyle.secondary} text="Close Dialog" onClick={closeDialog} />
           </>

@@ -1,9 +1,9 @@
 import { useMemo } from "react";
-import { Button, ButtonStyle, ColumnOptions, Link, Table } from "@sovryn/ui";
+import { Button, ButtonStyle, ColumnOptions, Table } from "@sovryn/ui";
 import { ProposalType } from "../../hooks/useActiveProposals";
-import { truncate } from "../../lib/helpers";
 import { useCanceledProposals } from "../../hooks/useCanceledProposals";
 import { ListOfSigners } from "../ListOfSigners/ListOfSigners";
+import { LinkToBitocracy } from "../LinkToBitocracy/LinkToExplorer";
 
 type RowType = {
   id: string;
@@ -18,7 +18,7 @@ const COLUMNS: ColumnOptions<RowType>[] = [{
   }, {
   id: 'title',
   title: 'Title',
-  cellRenderer: (row) => <Link href={`https://sovryn.app/bitocracy/${row.proposalId}`} text={truncate(row.title, 20)} openNewTab />,
+  cellRenderer: (row) => <LinkToBitocracy id={row.proposalId} title={row.title} />,
   }, {
   id: 'signatures',
   title: 'Signatures',

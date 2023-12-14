@@ -47,10 +47,10 @@ export const useProposalMapper = (proposals: any) => {
   }, [destinations, getVetoes]);
 
   useEffect(() => {
-    const unsub = useRefetchTrigger.subscribe((v) => {
+    const unsubscribe = useRefetchTrigger.subscribe((v) => {
       getVetoes({ variables: { destinations }});
     });
-    return () => unsub();
+    return () => unsubscribe();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
